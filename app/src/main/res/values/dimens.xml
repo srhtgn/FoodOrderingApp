@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<dimen name="layout_margin">16dp</dimen>
+<dimen name="searchView_radius">15dp</dimen>
+<dimen name="searchView_margin">3dp</dimen>
+<dimen name="card_elevation">0dp</dimen>
+</resources>
