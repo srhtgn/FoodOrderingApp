@@ -2,7 +2,6 @@ package com.example.foodorderingapp.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +10,9 @@ import com.example.foodorderingapp.data.entity.CartFoods
 import com.example.foodorderingapp.databinding.CartCardDesignBinding
 import com.example.foodorderingapp.ui.viewmodel.CartViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CartAdapter(
     var mContext: Context,
@@ -25,9 +27,9 @@ class CartAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardDesignHolder {
         val binding =
             CartCardDesignBinding.inflate(LayoutInflater.from(mContext), parent, false)
+
         return CardDesignHolder(binding)
     }
-
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CardDesignHolder, position: Int) {
         val cartFood = cartFoodList[position]
@@ -39,12 +41,13 @@ class CartAdapter(
             .override(cardSize)
             .into(t.imageViewCartFood)
         t.textViewCartFoodName.text = cartFood.yemek_adi
-        t.textViewCartFoodPrice.text = "Fiyat: ${cartFood.yemek_fiyat}₺"
-        t.textViewNumber2.text = "Adet: ${cartFood.yemek_siparis_adet}"
+        t.textViewCartFoodPrice.text = "Price: ${cartFood.yemek_fiyat}₺"
+        t.textViewNumber2.text = "Number: ${cartFood.yemek_siparis_adet}"
 
         t.imageViewDelete.setOnClickListener {
-            Snackbar.make(it, "${cartFood.yemek_adi} silinsin mi?", Snackbar.LENGTH_SHORT)
-                .setAction("EVET") {
+            Snackbar.make(it, "Delete ${cartFood.yemek_adi}?", Snackbar.LENGTH_SHORT)
+                .setAction("YES") {
+                    // Silme işlemi gerçekleştir
                     delete(cartFood.sepet_yemek_id, cartFood.kullanici_adi)
                 }.show()
         }
@@ -55,7 +58,8 @@ class CartAdapter(
     }
 
     fun delete(sepet_yemek_id: Int, kullanici_adi: String) {
+
         viewModel.delete(sepet_yemek_id, kullanici_adi)
-        notifyDataSetChanged() // Tüm veriyi güncelle
     }
+
 }

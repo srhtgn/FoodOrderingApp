@@ -10,7 +10,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -44,7 +43,8 @@ class LoginActivity : AppCompatActivity() {
                 showSnackbar("Lütfen email ve şifre alanlarını doldurun.")
 
             } else {
-                viewModel.login(email, password)            }
+                viewModel.login(email, password)
+            }
         }
 
         binding.textViewGoToRegister.setOnClickListener {

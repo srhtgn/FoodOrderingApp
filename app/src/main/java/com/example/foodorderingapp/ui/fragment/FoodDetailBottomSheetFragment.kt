@@ -1,6 +1,7 @@
 package com.example.foodorderingapp.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,9 @@ import com.bumptech.glide.Glide
 import com.example.foodorderingapp.R
 import com.example.foodorderingapp.data.entity.CartFoods
 import com.example.foodorderingapp.databinding.FragmentFoodDetailBottomSheetBinding
+import com.example.foodorderingapp.ui.adapter.CartAdapter
 import com.example.foodorderingapp.ui.adapter.FoodsAdapter
+import com.example.foodorderingapp.ui.viewmodel.CartViewModel
 import com.example.foodorderingapp.ui.viewmodel.FoodDetailViewModel
 import com.example.foodorderingapp.ui.viewmodel.UserViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -27,7 +30,6 @@ import java.util.UUID
 class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentFoodDetailBottomSheetBinding
     private lateinit var viewModel: FoodDetailViewModel
-    private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -35,7 +37,7 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
     var totalFoodPrice = 0
     var yemek_siparis_adedi = ""
     var number = 1
-    var kullaniciAdi = ""
+    var userName = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,14 +58,14 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
         binding.textViewFoodName2.setText(foodComing.yemek_adi)
         binding.textViewFoodPrice2.setText("${foodComing.yemek_fiyat}₺")
-        binding.textViewTotalPrice.setText("Fiyat: ${foodComing.yemek_fiyat}₺")
+        binding.textViewTotalPrice.setText("Price: ${foodComing.yemek_fiyat}₺")
 
 
         binding.buttonPlus.setOnClickListener {
             number++
             yemek_siparis_adedi = number.toString()
             binding.textViewNumber.setText(yemek_siparis_adedi)
-            binding.textViewTotalPrice.text = "Fiyat: ${number * foodComing.yemek_fiyat}₺"
+            binding.textViewTotalPrice.text = "Price: ${number * foodComing.yemek_fiyat}₺"
         }
 
         binding.buttonMinus.setOnClickListener {
@@ -71,10 +73,9 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 number--
                 yemek_siparis_adedi = number.toString()
                 binding.textViewNumber.setText(yemek_siparis_adedi)
-                binding.textViewTotalPrice.text = "Fiyat: ${number * foodComing.yemek_fiyat}₺"
+                binding.textViewTotalPrice.text = "Price: ${number * foodComing.yemek_fiyat}₺"
             }
         }
-
 
 
         if (currentUser != null) {
@@ -88,7 +89,7 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
                         // Firestore'dan gelen kullanıcı adını textView'e ayarla
                         val username = documentSnapshot.getString("username")
                         if (username != null) {
-                            kullaniciAdi = username
+                            userName = username
                         }
                     } else {
                         // Kullanıcı belirtilen dokümanı Firestore'da bulunmuyor
@@ -104,13 +105,26 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
         binding.buttonAddToCart.setOnClickListener {
             totalFoodPrice = number * foodComing.yemek_fiyat
 
-            addToCart(
-                yemek_adi = foodComing.yemek_adi,
-                yemek_resim_adi = url,
-                yemek_fiyat = totalFoodPrice,
-                yemek_siparis_adet = number,
-                kullanici_adi = kullaniciAdi
-            )
+            val cartItems = viewModel.cartFoodList.value.orEmpty()
+
+            val existingItem = cartItems.find { it.yemek_adi == foodComing.yemek_adi }
+
+            if (existingItem == null) {
+                addToCart(
+                    yemek_adi = foodComing.yemek_adi,
+                    yemek_resim_adi = url,
+                    yemek_fiyat = totalFoodPrice,
+                    yemek_siparis_adet = number,
+                    kullanici_adi = userName
+                )
+                dismiss()
+            } else {
+
+                view?.let { view ->
+                    Snackbar.make(view, "This product is already in the cart", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
         }
 
 
@@ -126,6 +140,7 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
         val tempViewModel: FoodDetailViewModel by viewModels()
         viewModel = tempViewModel
     }
+
     fun addToCart(
         yemek_adi: String,
         yemek_resim_adi: String,
@@ -133,18 +148,7 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
         yemek_siparis_adet: Int,
         kullanici_adi: String
     ) {
-        val cartItems = viewModel.cartFoodList.value.orEmpty()
-
-        val existingItem = cartItems.find { it.yemek_adi == yemek_adi }
-
-        if (existingItem == null) {
-            viewModel.save(yemek_adi, yemek_resim_adi, yemek_fiyat, yemek_siparis_adet, kullanici_adi)
-            dismiss()
-        } else {
-            view?.let { view ->
-                Snackbar.make(view, "Bu ürün zaten sepette bulunuyor", Snackbar.LENGTH_SHORT).show()
-            }
-        }
+        viewModel.save(yemek_adi, yemek_resim_adi, yemek_fiyat, yemek_siparis_adet, kullanici_adi)
+        dismiss()
     }
-
 }

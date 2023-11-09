@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.example.foodorderingapp.data.datasource.CartDataSource
 import com.example.foodorderingapp.data.datasource.FavoritesDataSource
 import com.example.foodorderingapp.data.datasource.FoodsDataSource
-import com.example.foodorderingapp.data.repository.AuthRepository
+import com.example.foodorderingapp.data.repository.firebase.AuthRepository
 import com.example.foodorderingapp.data.repository.CartRepository
 import com.example.foodorderingapp.data.repository.FavoritesRepository
 import com.example.foodorderingapp.data.repository.FoodsRepository
@@ -28,6 +28,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
+    //Retrofit
     @Provides
     @Singleton
     fun provideFoodsRepository(fds: FoodsDataSource): FoodsRepository {
@@ -64,6 +65,8 @@ class AppModule {
         return ApiUtils.getCartDao()
     }
 
+    //Room
+
     @Provides
     @Singleton
     fun provideFavoritesRepository(favDs: FavoritesDataSource): FavoritesRepository {
@@ -85,6 +88,8 @@ class AppModule {
     }
 
 
+    //Firebase
+
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
@@ -95,15 +100,6 @@ class AppModule {
     @Singleton
     fun provideFirebaseFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRepository(
-        auth: FirebaseAuth,
-        firestore: FirebaseFirestore
-    ): AuthRepository {
-        return AuthRepository(auth, firestore)
     }
 
     @Provides

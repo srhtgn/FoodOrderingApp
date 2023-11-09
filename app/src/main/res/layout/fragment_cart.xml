@@ -23,9 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/poppins_medium"
-            android:text="Sepet"
+            android:text="Shopping Cart"
             android:textColor="@color/secondary_color"
-            android:textSize="26sp"
+            android:textSize="34sp"
             android:textStyle="bold"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="174dp"
@@ -64,15 +64,14 @@
             android:id="@+id/textViewTotalPrice2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/text_view_custom_design"
             android:fontFamily="@font/poppins_medium"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="Toplam Fiyat"
+            android:text="Total"
             android:textAlignment="center"
             android:textColor="@color/secondary_color"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <Space
             android:layout_width="0dp"
@@ -83,11 +82,23 @@
             android:id="@+id/buttonConfirmCart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:backgroundTint="@color/secondary_color"
-            android:text="Sepeti Onayla"
+            android:text="Confirm Cart"
             android:textColor="@color/main_color"
             android:textSize="20sp"
-            app:cornerRadius="15dp"
-            android:layout_weight="1"/>
+            app:cornerRadius="15dp" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarCart"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/secondary_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

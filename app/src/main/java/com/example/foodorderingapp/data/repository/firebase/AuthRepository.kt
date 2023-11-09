@@ -1,6 +1,5 @@
-package com.example.foodorderingapp.data.repository
+package com.example.foodorderingapp.data.repository.firebase
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
@@ -9,6 +8,7 @@ import javax.inject.Inject
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+
 
 class AuthRepository @Inject constructor(private val auth: FirebaseAuth, private val firestore: FirebaseFirestore) {
 
@@ -39,3 +39,4 @@ class AuthRepository @Inject constructor(private val auth: FirebaseAuth, private
         return null
     }
 }
+

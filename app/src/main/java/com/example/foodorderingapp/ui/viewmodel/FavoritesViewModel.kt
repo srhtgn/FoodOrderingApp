@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.foodorderingapp.data.entity.Favorites
+import com.example.foodorderingapp.data.repository.firebase.AuthRepository
 import com.example.foodorderingapp.data.repository.FavoritesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoritesViewModel @Inject constructor(var favRepo: FavoritesRepository) : ViewModel() {
+class FavoritesViewModel @Inject constructor(var favRepo: FavoritesRepository, val authRepository: AuthRepository) : ViewModel() {
     var favoritesList = MutableLiveData<List<Favorites>>()
 
     init {

@@ -13,19 +13,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/ic_favorite_empty"
-        android:title="Favoriler" />
+        android:title="Favorites" />
 
     <item
         android:id="@+id/cartFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/ic_shopping_cart"
-        android:title="Cart" />
+        android:title="Shopping Cart" />
 
     <item
         android:id="@+id/userFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Kullanıcı"
+        android:title="My Account"
         android:icon="@drawable/ic_user"/>
 </menu>

@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.foodorderingapp.R
 import com.example.foodorderingapp.databinding.FragmentFavoritesBinding
 import com.example.foodorderingapp.ui.adapter.FavoritesAdapter
 import com.example.foodorderingapp.ui.viewmodel.FavoritesViewModel
@@ -24,7 +24,7 @@ class FavoritesFragment : Fragment() {
     ): View? {
         binding = FragmentFavoritesBinding.inflate(inflater, container, false)
 
-        binding.rVFavorites.layoutManager = LinearLayoutManager(requireContext())
+        binding.rVFavorites.layoutManager = GridLayoutManager(requireContext(), 2)
 
         viewModel.favoritesList.observe(viewLifecycleOwner) {
             val favoritesAdapter = FavoritesAdapter(requireContext(), it, viewModel)

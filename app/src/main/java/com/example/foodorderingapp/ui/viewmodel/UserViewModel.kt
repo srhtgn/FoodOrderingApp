@@ -1,11 +1,10 @@
 package com.example.foodorderingapp.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodorderingapp.data.repository.AuthRepository
+import com.example.foodorderingapp.data.repository.firebase.AuthRepository
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,10 +22,13 @@ class UserViewModel @Inject constructor(private val authRepository: AuthReposito
                 if (usernameResult != null) {
                     username.postValue(usernameResult)
                 } else {
+                    // Kullanıcı adı null ise nasıl işlem yapılacağını belirleyin.
                 }
             } catch (e: Exception) {
+                // Hata durumunu nasıl ele alacağınızı belirleyin.
             }
         }
-
     }
+
+
 }

@@ -6,15 +6,6 @@
     app:startDestination="@id/mainPageFragment">
 
     <fragment
-        android:id="@+id/mainPageFragment"
-        android:name="com.example.foodorderingapp.ui.fragment.MainPageFragment"
-        android:label="fragment_main_page"
-        tools:layout="@layout/fragment_main_page" >
-        <action
-            android:id="@+id/foodDetailBottomSheetTransition"
-            app:destination="@id/foodDetailBottomSheetFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.foodorderingapp.ui.fragment.CartFragment"
         android:label="fragment_cart"
@@ -39,10 +30,23 @@
         android:id="@+id/favoritesFragment"
         android:name="com.example.foodorderingapp.ui.fragment.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/FavoritesFragmentTransition"
+            app:destination="@id/foodDetailBottomSheetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userFragment"
         android:name="com.example.foodorderingapp.ui.fragment.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/mainPageFragment"
+        android:name="com.example.foodorderingapp.ui.fragment.MainPageFragment"
+        android:label="fragment_main_page"
+        tools:layout="@layout/fragment_main_page" >
+        <action
+            android:id="@+id/foodDetailBottomSheetTransition"
+            app:destination="@id/foodDetailBottomSheetFragment" />
+    </fragment>
 </navigation>

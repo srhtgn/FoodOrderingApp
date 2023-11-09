@@ -2,17 +2,20 @@ package com.example.foodorderingapp.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.foodorderingapp.LoginActivity
 import com.example.foodorderingapp.databinding.FragmentMainPageBinding
 import com.example.foodorderingapp.databinding.FragmentUserBinding
 import com.example.foodorderingapp.ui.adapter.FoodsAdapter
 import com.example.foodorderingapp.ui.viewmodel.MainPageViewModel
+import com.example.foodorderingapp.ui.viewmodel.UserViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,6 +26,8 @@ class UserFragment : Fragment() {
     private lateinit var binding: FragmentUserBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+
+    private val userViewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +76,7 @@ class UserFragment : Fragment() {
     }
 
     private fun showLogoutConfirmationSnackbar() {
-        Snackbar.make(requireView(), "Çıkış yapmak istediğinize emin misiniz?", Snackbar.LENGTH_LONG)
+        Snackbar.make(requireView(), "Are you sure you want to log out?", Snackbar.LENGTH_LONG)
             .setAction("Evet") {
                 // Kullanıcı onaylarsa çıkış yap
                 firebaseAuth.signOut()

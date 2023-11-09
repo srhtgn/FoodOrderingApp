@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.foodorderingapp.LoginActivity
-import com.example.foodorderingapp.data.repository.AuthRepository
+import com.example.foodorderingapp.data.repository.firebase.AuthRepository
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
 
-    // getCurrentUser işlem sonucunu LiveData ile sarmala
     var currentUser: LiveData<FirebaseUser?> = MutableLiveData()
 
     private val _snackbarMessage = MutableLiveData<String>()

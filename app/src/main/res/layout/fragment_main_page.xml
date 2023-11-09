@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.MainPageFragment">
 
+
+    <!--<SearchView-->
+    <!--        android:id="@+id/searchView"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@color/color_4"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -23,28 +37,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/poppins_medium"
-            android:text="Ürünler"
+            android:text="Welcome! Savor the Flavor."
             android:textColor="@color/secondary_color"
-            android:textSize="26sp"
+            android:textSize="34sp"
             android:textStyle="bold"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="174dp"
             tools:layout_editor_absoluteY="14dp" />
     </androidx.appcompat.widget.Toolbar>
-
-
-    <!--<SearchView-->
-    <!--        android:id="@+id/searchView"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:layout_marginEnd="16dp"-->
-    <!--        android:background="@color/color_4"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.5"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

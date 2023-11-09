@@ -1,6 +1,7 @@
 package com.example.foodorderingapp.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainPageFragment : Fragment() {
     private lateinit var binding: FragmentMainPageBinding
     private lateinit var viewModel: MainPageViewModel
+    private lateinit var foodsAdapter: FoodsAdapter
+    private lateinit var searchView: SearchView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,35 +28,42 @@ class MainPageFragment : Fragment() {
 
         binding.rVFoods.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        viewModel.foodList.observe(viewLifecycleOwner){
-            val foodsAdapter = FoodsAdapter(requireContext(),it,viewModel)
-            binding.rVFoods.adapter = foodsAdapter
+        viewModel.foodList.observe(viewLifecycleOwner) {
+            foodsAdapter.updateData(it)
         }
 
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                search(query)
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                search(newText)
-                return false
-            }
-
-        })
+        viewModel.searchFoods.observe(viewLifecycleOwner) { foods ->
+            foodsAdapter.updateData(foods)
+        }
 
         return binding.root
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tempViewModel: MainPageViewModel by viewModels()
         viewModel = tempViewModel
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    fun search(searchWord: String) {
-        viewModel.search(searchWord)
+        viewModel.searchFoods
+        foodsAdapter = FoodsAdapter(requireContext(), mutableListOf(), viewModel)
+        binding.rVFoods.adapter = foodsAdapter
+
+        searchView = binding.searchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.search(newText.orEmpty())
+                return true
+            }
+
+        })
     }
 
     override fun onResume() {
