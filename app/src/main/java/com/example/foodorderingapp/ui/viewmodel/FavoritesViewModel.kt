@@ -13,34 +13,42 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoritesViewModel @Inject constructor(var favRepo: FavoritesRepository, val authRepository: AuthRepository) : ViewModel() {
+class FavoritesViewModel @Inject constructor(var favoritesRepository: FavoritesRepository, val authRepository: AuthRepository) : ViewModel() {
+    // LiveData to hold the list of favorite items
     var favoritesList = MutableLiveData<List<Favorites>>()
 
+    // Initialize the ViewModel by uploading the user's favorite items
     init {
         uploadFavorites()
     }
 
+    // Coroutine function to upload the user's favorite items
     fun uploadFavorites() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                favoritesList.value = favRepo.uploadFavorite()
-
-            }catch (e: Exception){
-                Log.e("Hata", "hata liste ${e.message}", e)
+                // Attempt to upload the favorite items and update the LiveData
+                favoritesList.value = favoritesRepository.uploadFavorite()
+            } catch (e: Exception) {
+                // Log any exceptions that may occur during the upload
+                Log.e("Error", "Error in uploading favorites: ${e.message}", e)
             }
         }
     }
 
-    fun delete(yemek_id: Int) {
+    // Coroutine function to delete a favorite item
+    fun delete(foodId: Int) {
         CoroutineScope(Dispatchers.Main).launch {
-            favRepo.delete(yemek_id)
+            // Delete the favorite item from the repository and upload the updated list
+            favoritesRepository.delete(foodId)
             uploadFavorites()
         }
     }
 
+    // Coroutine function to search for favorite items based on a search word
     fun search(searchWord: String) {
         CoroutineScope(Dispatchers.Main).launch {
-            favoritesList.value = favRepo.search(searchWord)
+            // Perform a search and update the LiveData with the results
+            favoritesList.value = favoritesRepository.search(searchWord)
         }
     }
 }

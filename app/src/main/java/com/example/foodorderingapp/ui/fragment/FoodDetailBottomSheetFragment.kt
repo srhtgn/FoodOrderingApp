@@ -35,120 +35,126 @@ class FoodDetailBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var firestore: FirebaseFirestore
 
     var totalFoodPrice = 0
-    var yemek_siparis_adedi = ""
-    var number = 1
+    var orderQuantity = 1
     var userName = ""
 
+    // Called when the fragment view is created
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFoodDetailBottomSheetBinding.inflate(inflater, container, false)
 
+        // Get current user from FirebaseAuth
         val currentUser = firebaseAuth.currentUser
 
+        // Get the food details from the arguments using Safe Args
         val bundle: FoodDetailBottomSheetFragmentArgs by navArgs()
         val foodComing = bundle.food
-        val url = "http://kasimadalan.pe.hu/yemekler/resimler/${foodComing.yemek_resim_adi}"
+        val imageUrl = "http://kasimadalan.pe.hu/yemekler/resimler/${foodComing.yemek_resim_adi}"
 
+        // Load image into the ImageView using Glide library
         Glide.with(this)
-            .load(url)
+            .load(imageUrl)
             .override(500)
             .into(binding.imageViewFood2)
 
-        binding.textViewFoodName2.setText(foodComing.yemek_adi)
-        binding.textViewFoodPrice2.setText("${foodComing.yemek_fiyat}₺")
-        binding.textViewTotalPrice.setText("Price: ${foodComing.yemek_fiyat}₺")
+        // Set food details in the UI
+        binding.textViewFoodName2.text = foodComing.yemek_adi
+        binding.textViewFoodPrice2.text = "${foodComing.yemek_fiyat}₺"
+        binding.textViewTotalPrice.text = "Price: ${foodComing.yemek_fiyat}₺"
 
-
+        // Increase the order quantity when the plus button is clicked
         binding.buttonPlus.setOnClickListener {
-            number++
-            yemek_siparis_adedi = number.toString()
-            binding.textViewNumber.setText(yemek_siparis_adedi)
-            binding.textViewTotalPrice.text = "Price: ${number * foodComing.yemek_fiyat}₺"
+            orderQuantity++
+            updateQuantityAndTotalPrice()
         }
 
+        // Decrease the order quantity when the minus button is clicked
         binding.buttonMinus.setOnClickListener {
-            if (number > 1) {
-                number--
-                yemek_siparis_adedi = number.toString()
-                binding.textViewNumber.setText(yemek_siparis_adedi)
-                binding.textViewTotalPrice.text = "Price: ${number * foodComing.yemek_fiyat}₺"
+            if (orderQuantity > 1) {
+                orderQuantity--
+                updateQuantityAndTotalPrice()
             }
         }
 
-
-        if (currentUser != null) {
-            // Firestore'daki "users" koleksiyonundan kullanıcı adını al
-            val uid = currentUser.uid
-            firestore.collection("users")
-                .document(uid)
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    if (documentSnapshot.exists()) {
-                        // Firestore'dan gelen kullanıcı adını textView'e ayarla
-                        val username = documentSnapshot.getString("username")
-                        if (username != null) {
-                            userName = username
-                        }
-                    } else {
-                        // Kullanıcı belirtilen dokümanı Firestore'da bulunmuyor
-                    }
-                }
-                .addOnFailureListener { e ->
-                    // Firestore verileri alınamadı
-                }
-        } else {
-            // Kullanıcı oturum açmamış
+        // Fetch current user details from Firestore
+        currentUser?.let { user ->
+            fetchUserDetails(user.uid)
         }
 
+        // Add the selected food item to the cart
         binding.buttonAddToCart.setOnClickListener {
-            totalFoodPrice = number * foodComing.yemek_fiyat
+            totalFoodPrice = orderQuantity * foodComing.yemek_fiyat
 
+            // Check if the item is already in the cart
             val cartItems = viewModel.cartFoodList.value.orEmpty()
-
             val existingItem = cartItems.find { it.yemek_adi == foodComing.yemek_adi }
 
             if (existingItem == null) {
-                addToCart(
-                    yemek_adi = foodComing.yemek_adi,
-                    yemek_resim_adi = url,
-                    yemek_fiyat = totalFoodPrice,
-                    yemek_siparis_adet = number,
-                    kullanici_adi = userName
-                )
+                addToCart(foodComing.yemek_adi, imageUrl, totalFoodPrice, orderQuantity, userName)
                 dismiss()
             } else {
-
+                // Show a Snackbar message if the item is already in the cart
                 view?.let { view ->
                     Snackbar.make(view, "This product is already in the cart", Snackbar.LENGTH_SHORT).show()
                 }
             }
-
         }
-
 
         return binding.root
     }
 
+    // Called when the fragment is created
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Initialize FirebaseAuth and Firestore instances
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
+        // Initialize FoodDetailViewModel using viewModels delegate
         val tempViewModel: FoodDetailViewModel by viewModels()
         viewModel = tempViewModel
     }
 
-    fun addToCart(
-        yemek_adi: String,
-        yemek_resim_adi: String,
-        yemek_fiyat: Int,
-        yemek_siparis_adet: Int,
-        kullanici_adi: String
+    // Function to update the quantity and total price in the UI
+    private fun updateQuantityAndTotalPrice() {
+        orderQuantity.let {
+            binding.textViewNumber.text = it.toString()
+            binding.textViewTotalPrice.text = "Price: ${it * totalFoodPrice}₺"
+        }
+    }
+
+    // Function to fetch user details from Firestore
+    private fun fetchUserDetails(uid: String) {
+        firestore.collection("users")
+            .document(uid)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val username = documentSnapshot.getString("username")
+                    username?.let {
+                        userName = it
+                    }
+                } else {
+                    // User document not found in Firestore
+                }
+            }
+            .addOnFailureListener { e ->
+                // Failed to retrieve Firestore data
+            }
+    }
+
+    // Function to add the selected food item to the cart
+    private fun addToCart(
+        foodName: String,
+        foodImageUrl: String,
+        foodPrice: Int,
+        orderQuantity: Int,
+        username: String
     ) {
-        viewModel.save(yemek_adi, yemek_resim_adi, yemek_fiyat, yemek_siparis_adet, kullanici_adi)
+        viewModel.save(foodName, foodImageUrl, foodPrice, orderQuantity, username)
         dismiss()
     }
 }

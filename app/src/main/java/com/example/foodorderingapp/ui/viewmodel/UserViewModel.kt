@@ -12,23 +12,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
+
+    // LiveData to observe changes in the current user data
     val currentUser: LiveData<FirebaseUser?> = authRepository.getCurrentUserLiveData()
+
+    // MutableLiveData to hold the user's username
     val username: MutableLiveData<String?> = MutableLiveData()
 
+    /**
+     * Coroutine function to fetch user details, including the username, based on the provided user ID.
+     * If successful, update the username MutableLiveData; otherwise, handle the null username or any exceptions.
+     */
     fun fetchUserDetails(uid: String) {
         viewModelScope.launch {
             try {
                 val usernameResult = authRepository.fetchUserDetails(uid)
                 if (usernameResult != null) {
+                    // Update the username MutableLiveData on successful user details fetch
                     username.postValue(usernameResult)
                 } else {
-                    // Kullanıcı adı null ise nasıl işlem yapılacağını belirleyin.
+                    // Handle the case when the username is null after fetching user details
+                    // Consider appropriate actions for this scenario.
                 }
             } catch (e: Exception) {
-                // Hata durumunu nasıl ele alacağınızı belirleyin.
+                // Handle any exceptions that may occur during the user details fetch
+                // Consider appropriate error-handling actions for this scenario.
             }
         }
     }
-
-
 }

@@ -23,33 +23,40 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set the context for the ViewModel
         viewModel.setContext(this)
 
+        // Observe changes in the current user data from the ViewModel
         viewModel.currentUser.observe(this) { user ->
+            // If a user is logged in, navigate to the login activity and finish the register activity
             if (user != null) {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
         }
 
+        // Observe snackbar messages from the ViewModel and display them
         viewModel.snackbarMessage.observe(this, { message ->
             message?.let {
                 showSnackbar(message)
             }
         })
 
+        // Set up register button click listener
         binding.buttonRegister.setOnClickListener {
             val username = binding.editTextUsername.text.toString()
             val email = binding.editTextEmailRegister.text.toString()
             val password = binding.editTextPasswordRegister.text.toString()
 
+            // Check if username, email, and password are not empty, initiate the registration process
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                showSnackbar("Lütfen tüm alanları doldurun.")
+                showSnackbar("Please fill in all fields.")
             } else {
                 viewModel.register(username, email, password)
             }
         }
 
+        // Set up click listener to navigate to the login screen
         binding.textViewGoToLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -57,6 +64,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    // Helper function to display a Snackbar with the provided message
     fun showSnackbar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }

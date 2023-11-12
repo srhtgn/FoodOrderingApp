@@ -16,41 +16,48 @@ import com.example.foodorderingapp.utils.transition
 import com.google.android.material.snackbar.Snackbar
 
 class FavoritesAdapter(
-    var mContext: Context,
-    var favoritesList: List<Favorites>,
-    var viewModel: FavoritesViewModel
+    private val mContext: Context,
+    private val favoritesList: List<Favorites>,
+    private val viewModel: FavoritesViewModel
 ) : RecyclerView.Adapter<FavoritesAdapter.CardDesignHolder>() {
-    val cardSize = 500
 
-    inner class CardDesignHolder(var design: FavoritesCardDesignBinding) :
+    // Size for image loading
+    private val cardSize = 500
+
+    // Inner class representing the ViewHolder for the RecyclerView
+    inner class CardDesignHolder(val design: FavoritesCardDesignBinding) :
         RecyclerView.ViewHolder(design.root)
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): FavoritesAdapter.CardDesignHolder {
+    // Called when the RecyclerView needs a new ViewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardDesignHolder {
+        // Inflate the layout for a card item and create a ViewHolder
         val binding = FavoritesCardDesignBinding.inflate(LayoutInflater.from(mContext), parent, false)
         return CardDesignHolder(binding)
     }
 
+    // Called to bind data to a specific ViewHolder
     override fun onBindViewHolder(holder: CardDesignHolder, position: Int) {
+        // Retrieve the data for the current position
         val favorite = favoritesList[position]
-        val t = holder.design
-        val url = "http://kasimadalan.pe.hu/yemekler/resimler/${favorite.yemek_resim_adi}"
+        val cardDesign = holder.design
+        val imageUrl = "http://kasimadalan.pe.hu/yemekler/resimler/${favorite.yemek_resim_adi}"
 
-        Log.e("FavoritesAdapter", favorite.toString())
-
-        Log.e("Favori", favorite.yemek_adi)
-
+        // Load image into the ImageView using Glide library
         Glide.with(mContext)
-            .load(url)
+            .load(imageUrl)
             .override(cardSize)
-            .into(t.imageViewFavoritesFood)
-        t.textViewFavoritesFoodName.text = favorite.yemek_adi
-        t.textViewFavoritesFoodPrice.text = favorite.yemek_fiyat
+            .into(cardDesign.imageViewFavoritesFood)
 
+        // Set food name and price text
+        cardDesign.textViewFavoritesFoodName.text = favorite.yemek_adi
+        cardDesign.textViewFavoritesFoodPrice.text = favorite.yemek_fiyat
+
+        // Log favorite details for debugging
+        Log.e("FavoritesAdapter", favorite.toString())
+        Log.e("Favorite", favorite.yemek_adi)
     }
 
+    // Returns the total number of items in the data set
     override fun getItemCount(): Int {
         return favoritesList.size
     }

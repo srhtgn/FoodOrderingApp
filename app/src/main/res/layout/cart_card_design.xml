@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardBackgroundColor="@color/color_4"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="@dimen/radius15"
         app:cardElevation="@dimen/card_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,7 +40,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="TextView"
                 android:textColor="@color/secondary_color"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size18"
                 app:layout_constraintBottom_toTopOf="@+id/textViewNumber2"
                 app:layout_constraintStart_toStartOf="@+id/textViewCartFoodName"
                 app:layout_constraintTop_toBottomOf="@+id/textViewCartFoodName" />
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textColor="@color/secondary_color"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textViewCartFoodPrice"
                 app:layout_constraintTop_toBottomOf="@+id/textViewCartFoodPrice" />
@@ -69,7 +69,7 @@
                 android:id="@+id/imageViewDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="@dimen/layout_margin16"
                 android:tint="@color/secondary_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

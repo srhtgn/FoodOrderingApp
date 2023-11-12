@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/layout_margin16"
         android:fontFamily="@font/poppins_medium"
         android:text="Food Detail"
         android:textColor="@color/secondary_color"
@@ -53,7 +53,7 @@
         android:id="@+id/textViewFoodPrice2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/layout_margin8"
         android:fontFamily="@font/poppins_medium"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
@@ -78,8 +78,8 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/layout_margin16"
+            android:layout_marginEnd="@dimen/layout_margin16"
             android:orientation="horizontal">
 
             <Button
@@ -90,7 +90,7 @@
                 android:text="-"
                 android:textColor="@color/secondary_color"
                 android:textSize="30sp"
-                app:cornerRadius="15dp" />
+                app:cornerRadius="@dimen/radius15" />
 
             <Space
                 android:layout_width="0dp"
@@ -135,30 +135,30 @@
                 android:id="@+id/textViewTotalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="@dimen/layout_weight"
                 android:fontFamily="@font/poppins_medium"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:paddingStart="@dimen/padding10"
+                android:paddingEnd="@dimen/padding10"
                 android:text="Total"
                 android:textAlignment="center"
                 android:textColor="@color/secondary_color"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_size20" />
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="@dimen/layout_weight" />
 
             <Button
                 android:id="@+id/buttonAddToCart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="@dimen/layout_weight"
                 android:backgroundTint="@color/secondary_color"
                 android:text="Add to Cart"
                 android:textColor="@color/main_color"
-                android:textSize="20sp"
-                app:cornerRadius="15dp" />
+                android:textSize="@dimen/text_size20"
+                app:cornerRadius="@dimen/radius15" />
         </LinearLayout>
 
     </LinearLayout>

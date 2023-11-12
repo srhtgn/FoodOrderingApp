@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<dimen name="layout_margin">16dp</dimen>
-<dimen name="searchView_radius">15dp</dimen>
-<dimen name="searchView_margin">3dp</dimen>
-<dimen name="card_elevation">0dp</dimen>
+    <dimen name="layout_margin5">5dp</dimen>
+    <dimen name="layout_margin8">8dp</dimen>
+    <dimen name="layout_margin16">16dp</dimen>
+    <dimen name="layout_margin32">32dp</dimen>
+    <dimen name="layout_margin100">100dp</dimen>
+    <dimen name="padding10">10dp</dimen>
+    <dimen name="radius15">15dp</dimen>
+    <dimen name="searchView_margin">3dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
+    <dimen name="layout_weight">1</dimen>
+    <dimen name="text_size16">16sp</dimen>
+    <dimen name="text_size18">18sp</dimen>
+    <dimen name="text_size20">20sp</dimen>
+    <dimen name="text_size34">34sp</dimen>
+    <dimen name="icon_size">30dp</dimen>
 </resources>

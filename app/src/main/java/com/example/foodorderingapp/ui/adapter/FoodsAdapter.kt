@@ -16,56 +16,58 @@ import com.example.foodorderingapp.ui.viewmodel.MainPageViewModel
 import com.example.foodorderingapp.utils.transition
 
 class FoodsAdapter(
-    var mContext: Context, // Bağlam nesnesi
-    var foodList: List<Foods>, // Yemek listesi
-    var viewModel: MainPageViewModel, // Ana sayfa görünüm modeli
+    private val mContext: Context, // Context object
+    private var foodList: List<Foods>, // List of food items
+    private val viewModel: MainPageViewModel // Main page view model
 ) : RecyclerView.Adapter<FoodsAdapter.CardDesignHolder>() {
 
-    val cardSize = 500 // Kart boyutu
+    private val cardSize = 500 // Card size
     private val sharedPreferences = mContext.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
 
     inner class CardDesignHolder(var design: FoodCardDesignBinding) :
-        RecyclerView.ViewHolder(design.root) // Kart tasarımı tutan iç içe sınıf
+        RecyclerView.ViewHolder(design.root) // Inner class holding the card design
 
+    // Called when the RecyclerView needs a new ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardDesignHolder {
-        // Kart görünümünü oluştur
+        // Inflate the layout for a card item and create a ViewHolder
         val binding = FoodCardDesignBinding.inflate(LayoutInflater.from(mContext), parent, false)
         return CardDesignHolder(binding)
     }
 
+    // Called to bind data to a specific ViewHolder
     override fun onBindViewHolder(holder: CardDesignHolder, position: Int) {
-        val food = foodList[position] // Belirli bir konum için yemek öğesi
-        val t = holder.design // Kart tasarımı
+        val food = foodList[position] // Food item for a specific position
+        val t = holder.design // Card design
 
-        // Yemek resminin URL'si
+        // URL for the food image
         val url = "http://kasimadalan.pe.hu/yemekler/resimler/${food.yemek_resim_adi}"
 
-        // Glide ile resmi yükle
+        // Load image into the ImageView using Glide library
         Glide.with(mContext)
             .load(url)
             .override(cardSize)
             .into(t.imageViewFood)
 
-        // Yemek adını ve fiyatını ayarla
+        // Set food name and price
         t.textViewFoodName.text = food.yemek_adi
         t.textViewFoodPrice.text = "${food.yemek_fiyat}₺"
 
-        // Yemek favori mi kontrol et
+        // Check if the food is a favorite
         val isFavorite = sharedPreferences.getBoolean("favorite_${food.yemek_id}", false)
         t.favoriteToggleButton.isChecked = isFavorite
 
-        // Kart tıklanınca ayrıntılarını göster
+        // Show details when the card is clicked
         t.cardFood.setOnClickListener {
             val transition = MainPageFragmentDirections.foodDetailBottomSheetTransition(food)
             Navigation.transition(it, transition)
         }
 
-        // Favori düğmesinin durum değişikliğini dinle
+        // Listen for changes in the favorite toggle button state
         t.favoriteToggleButton.setOnCheckedChangeListener { buttonView, isChecked ->
-            // Tercihlere favori durumunu kaydet
+            // Save the favorite status to preferences
             sharedPreferences.edit().putBoolean("favorite_${food.yemek_id}", isChecked).apply()
 
-            // Eğer seçiliyse, yemeği kaydet; değilse sil
+            // If selected, save the food; otherwise, delete it
             if (isChecked) {
                 save(food.yemek_id, food.yemek_adi, food.yemek_resim_adi, "${food.yemek_fiyat}₺")
             } else {
@@ -74,21 +76,23 @@ class FoodsAdapter(
         }
     }
 
+    // Function to update the data set with new data
     fun updateData(newData: List<Foods>) {
         foodList = newData
         notifyDataSetChanged()
     }
 
+    // Returns the total number of items in the data set
     override fun getItemCount(): Int {
-        return foodList.size // Yemek listesinin boyutunu döndür
+        return foodList.size
     }
 
-    // Yemeği kaydetme işlemi
+    // Save the food item
     fun save(yemek_id: Int, yemek_adi: String, yemek_resim_adi: String, yemek_fiyat: String) {
         viewModel.save(yemek_id, yemek_adi, yemek_resim_adi, yemek_fiyat)
     }
 
-    // Yemeği silme işlemi
+    // Delete the food item
     fun delete(yemek_id: Int) {
         viewModel.delete(yemek_id)
     }

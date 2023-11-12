@@ -16,56 +16,70 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainPageViewModel @Inject constructor(
-    var fRepo: FoodsRepository,
-    var favRepo: FavoritesRepository
+    var foodsRepository: FoodsRepository,
+    var favoritesRepository: FavoritesRepository
 ) : ViewModel() {
 
+    // LiveData to hold the list of all foods and the list of foods for search results
     var foodList = MutableLiveData<List<Foods>>()
     var searchFoods = MutableLiveData<List<Foods>>()
 
+    // Initialize the ViewModel by uploading the list of foods
     init {
         uploadFoods()
     }
 
-    //Foods
+    // Coroutine function to upload the list of foods
     fun uploadFoods() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                foodList.value = fRepo.uploadFoods()
-                searchFoods.value = fRepo.uploadFoods()
+                // Attempt to upload the list of foods and update the LiveData
+                foodList.value = foodsRepository.uploadFoods()
+                searchFoods.value = foodsRepository.uploadFoods()
             } catch (e: Exception) {
+                // Handle any exceptions that may occur during the upload
             }
         }
     }
 
+    // Coroutine function to search for foods based on a search word
     fun search(searchWord: String) {
+        // Get the list of all foods
         val foods = foodList.value ?: emptyList()
-        val searchResponse =
-            foods.filter { foods ->
-                foods.yemek_adi.contains(searchWord, ignoreCase = true)
-            }
+
+        // Filter foods based on the search word and update the search results LiveData
+        val searchResponse = foods.filter { food ->
+            food.yemek_adi.contains(searchWord, ignoreCase = true)
+        }
         searchFoods.value = searchResponse
     }
 
-    //Favorites
-
+    // Coroutine function to save a food item to favorites
     fun save(
-        yemek_id: Int,
-        yemek_adi: String,
-        yemek_resim_adi: String,
-        yemek_fiyat: String,
+        foodId: Int,
+        foodName: String,
+        foodImageName: String,
+        foodPrice: String,
     ) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                favRepo.save(yemek_id, yemek_adi, yemek_resim_adi, yemek_fiyat)
+                // Attempt to save the food item to favorites
+                favoritesRepository.save(foodId, foodName, foodImageName, foodPrice)
             } catch (e: Exception) {
+                // Handle any exceptions that may occur during the save operation
             }
         }
     }
 
-    fun delete(yemek_id: Int) {
+    // Coroutine function to delete a food item from favorites
+    fun delete(foodId: Int) {
         CoroutineScope(Dispatchers.Main).launch {
-            favRepo.delete(yemek_id)
+            try {
+                // Attempt to delete the food item from favorites
+                favoritesRepository.delete(foodId)
+            } catch (e: Exception) {
+                // Handle any exceptions that may occur during the delete operation
+            }
         }
     }
 }

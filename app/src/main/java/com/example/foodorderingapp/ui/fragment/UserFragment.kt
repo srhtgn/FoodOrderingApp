@@ -29,45 +29,48 @@ class UserFragment : Fragment() {
 
     private val userViewModel: UserViewModel by viewModels()
 
+    // Called when the fragment is created
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Firebase Authentication ve Firestore örneklerini alın
+        // Get instances of Firebase Authentication and Firestore
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
     }
 
+    // Called when the fragment view is created
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentUserBinding.inflate(inflater, container, false)
 
+        // Get the current user from Firebase Authentication
         val currentUser = firebaseAuth.currentUser
 
         if (currentUser != null) {
-            // Firestore'daki "users" koleksiyonundan kullanıcı adını al
+            // Fetch the username from the "users" collection in Firestore
             val uid = currentUser.uid
             firestore.collection("users")
                 .document(uid)
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
                     if (documentSnapshot.exists()) {
-                        // Firestore'dan gelen kullanıcı adını textView'e ayarla
+                        // Set the username from Firestore to the textView
                         val username = documentSnapshot.getString("username")
                         binding.textViewCurrentUser.text = username
                     } else {
-                        // Kullanıcı belirtilen dokümanı Firestore'da bulunmuyor
+                        // User document not found in Firestore
                     }
                 }
                 .addOnFailureListener { e ->
-                    // Firestore verileri alınamadı
+                    // Failed to retrieve Firestore data
                 }
         } else {
-            // Kullanıcı oturum açmamış
+            // User is not signed in
         }
 
-        // Çıkış yap butonuna tıklama işlemi
+        // Set up the click listener for the logout button
         binding.buttonLogout.setOnClickListener {
             showLogoutConfirmationSnackbar()
         }
@@ -75,16 +78,18 @@ class UserFragment : Fragment() {
         return binding.root
     }
 
+    // Show a Snackbar to confirm logout
     private fun showLogoutConfirmationSnackbar() {
         Snackbar.make(requireView(), "Are you sure you want to log out?", Snackbar.LENGTH_LONG)
-            .setAction("Evet") {
-                // Kullanıcı onaylarsa çıkış yap
+            .setAction("Yes") {
+                // If user confirms, sign out and navigate to the login activity
                 firebaseAuth.signOut()
                 navigateToLoginActivity()
             }
             .show()
     }
 
+    // Navigate to the login activity
     private fun navigateToLoginActivity() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

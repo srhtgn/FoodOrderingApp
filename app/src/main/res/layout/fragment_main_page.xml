@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.MainPageFragment">
 
-
-    <!--<SearchView-->
-    <!--        android:id="@+id/searchView"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:layout_marginEnd="16dp"-->
-    <!--        android:background="@color/color_4"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.5"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -39,7 +25,7 @@
             android:fontFamily="@font/poppins_medium"
             android:text="Welcome! Savor the Flavor."
             android:textColor="@color/secondary_color"
-            android:textSize="34sp"
+            android:textSize="@dimen/text_size34"
             android:textStyle="bold"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="174dp"
@@ -50,9 +36,9 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin"
+        android:layout_margin="@dimen/layout_margin16"
         app:cardBackgroundColor="@color/color_4"
-        app:cardCornerRadius="@dimen/searchView_radius"
+        app:cardCornerRadius="@dimen/radius15"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -70,10 +56,10 @@
         android:id="@+id/rVFoods"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/layout_margin"
-        android:layout_marginTop="@dimen/layout_margin"
-        android:layout_marginEnd="@dimen/layout_margin"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="@dimen/layout_margin16"
+        android:layout_marginTop="@dimen/layout_margin16"
+        android:layout_marginEnd="@dimen/layout_margin16"
+        android:layout_marginBottom="@dimen/layout_margin8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

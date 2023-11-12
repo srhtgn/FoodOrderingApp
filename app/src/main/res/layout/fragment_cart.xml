@@ -36,10 +36,10 @@
         android:id="@+id/rVCartFoods"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="@dimen/layout_margin16"
+        android:layout_marginTop="@dimen/layout_margin16"
+        android:layout_marginEnd="@dimen/layout_margin16"
+        android:layout_marginBottom="@dimen/layout_margin16"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -51,9 +51,9 @@
         android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="@dimen/layout_margin16"
+        android:layout_marginEnd="@dimen/layout_margin16"
+        android:layout_marginBottom="@dimen/layout_margin8"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,23 +71,23 @@
             android:text="Total"
             android:textAlignment="center"
             android:textColor="@color/secondary_color"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size20" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="@dimen/layout_weight" />
 
         <Button
             android:id="@+id/buttonConfirmCart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="@dimen/layout_weight"
             android:backgroundTint="@color/secondary_color"
             android:text="Confirm Cart"
             android:textColor="@color/main_color"
-            android:textSize="20sp"
-            app:cornerRadius="15dp" />
+            android:textSize="@dimen/text_size20"
+            app:cornerRadius="@dimen/radius15" />
     </LinearLayout>
 
     <ProgressBar

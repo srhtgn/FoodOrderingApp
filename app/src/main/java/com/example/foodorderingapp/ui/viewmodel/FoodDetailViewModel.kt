@@ -14,82 +14,99 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FoodDetailViewModel @Inject constructor(var cRepo: CartRepository, val authRepository: AuthRepository) : ViewModel() {
+class FoodDetailViewModel @Inject constructor(
+    var cartRepository: CartRepository,
+    val authRepository: AuthRepository
+) : ViewModel() {
+    // LiveData to hold the list of items in the cart
     var cartFoodList = MutableLiveData<List<CartFoods>>()
 
+    // Initialize the ViewModel
     init {
+        // Observe changes in the current user data
         val currentUserLiveData = authRepository.getCurrentUserLiveData()
         currentUserLiveData.observeForever { firebaseUser ->
             if (firebaseUser != null) {
-                val kullaniciEmail = firebaseUser.email
-                if (kullaniciEmail != null) {
-                    fetchUsernameAndUploadFoodDetail(kullaniciEmail)
+                // If the user is authenticated, fetch their email
+                val userEmail = firebaseUser.email
+                if (userEmail != null) {
+                    // Fetch the username and upload cart foods for the user
+                    fetchUsernameAndUploadFoodDetail(userEmail)
                 }
             }
         }
     }
 
-    private fun fetchUsernameAndUploadFoodDetail(kullaniciEmail: String) {
+    // Fetch the username based on the user's email and upload cart foods
+    private fun fetchUsernameAndUploadFoodDetail(userEmail: String) {
         val firestore = FirebaseFirestore.getInstance()
         val usersCollection = firestore.collection("users")
 
-        usersCollection.whereEqualTo("email", kullaniciEmail)
+        usersCollection.whereEqualTo("email", userEmail)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     val userDocument = querySnapshot.documents[0]
-                    val kullanici_adi = userDocument.getString("username")
-                    if (kullanici_adi != null) {
-                        uploadCartFoods(kullanici_adi)
-                        Log.e("CartViewModel", kullanici_adi)
+                    val username = userDocument.getString("username")
+                    if (username != null) {
+                        // Upload cart foods for the user and log the username
+                        uploadCartFoods(username)
+                        Log.e("CartViewModel", username)
                     }
                 }
             }
             .addOnFailureListener { e ->
-                // Firestore query failed
+                // Handle the failure of the Firestore query
             }
     }
 
-    fun uploadCartFoods(kullanici_adi: String) {
+    // Coroutine function to upload the updated cart foods for the user
+    fun uploadCartFoods(username: String) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                cartFoodList.value = cRepo.uploadCartFoods(kullanici_adi)
+                // Attempt to upload the updated cart foods and update the LiveData
+                cartFoodList.value = cartRepository.uploadCartFoods(username)
             } catch (e: Exception) {
+                // Handle any exceptions that may occur during the upload
             }
         }
     }
 
+    // Coroutine function to save a new item to the cart
     fun save(
-        yemek_adi: String,
-        yemek_resim_adi: String,
-        yemek_fiyat: Int,
-        yemek_siparis_adet: Int,
-        kullanici_adi: String
+        foodName: String,
+        foodImageName: String,
+        foodPrice: Int,
+        foodOrderQuantity: Int,
+        username: String
     ) {
         CoroutineScope(Dispatchers.Main).launch {
-
             try {
-                cRepo.save(
-                    yemek_adi,
-                    yemek_resim_adi,
-                    yemek_fiyat,
-                    yemek_siparis_adet,
-                    kullanici_adi
+                // Attempt to save the item to the cart repository
+                cartRepository.save(
+                    foodName,
+                    foodImageName,
+                    foodPrice,
+                    foodOrderQuantity,
+                    username
                 )
             } catch (e: Exception) {
+                // Handle any exceptions that may occur during the save operation
             }
-
         }
     }
 
-    fun delete(sepet_yemek_id: Int, kullanici_adi: String) {
+    // Coroutine function to delete an item from the cart
+    fun delete(cartItemId: Int, username: String) {
         CoroutineScope(Dispatchers.Main).launch {
-
             try {
-                cRepo.delete(sepet_yemek_id, kullanici_adi)
+                // Attempt to delete the item from the cart repository
+                cartRepository.delete(cartItemId, username)
             } catch (e: Exception) {
+                // Handle any exceptions that may occur during the delete operation
             }
-            uploadCartFoods(kullanici_adi)
+            // Upload the updated cart foods after deletion
+            uploadCartFoods(username)
         }
     }
 }

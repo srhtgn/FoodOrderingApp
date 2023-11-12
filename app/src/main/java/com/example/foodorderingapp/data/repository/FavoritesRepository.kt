@@ -12,13 +12,11 @@ class FavoritesRepository(var favDataSource: FavoritesDataSource) {
         yemek_fiyat: String,
     ): Boolean {
         try {
-            // Veriyi kaydetmeye çalış
             favDataSource.save(yemek_id, yemek_adi, yemek_resim_adi, yemek_fiyat)
-            return true // Başarılı olduğunda true döndür
+            return true
         } catch (e: Exception) {
-            // Hata oluştuğunda logla
             Log.e("FavoritesRepository", "Veri kaydedilirken hata oluştu: ${e.message}")
-            return false // Başarısız olduğunda false döndür
+            return false
         }
     }
 
@@ -28,10 +26,10 @@ class FavoritesRepository(var favDataSource: FavoritesDataSource) {
     suspend fun uploadFavorite(): List<Favorites> {
         try {
             val result = favDataSource.uploadFavorite()
-            return result ?: emptyList() // Eğer null bir sonuç gelirse, boş bir liste döndür
+            return result ?: emptyList()
         } catch (e: Exception) {
             Log.e("FavoritesRepository", "Veri yüklenirken hata oluştu: ${e.message}")
-            return emptyList() // Hata durumunda boş bir liste döndür
+            return emptyList()
         }
     }
 

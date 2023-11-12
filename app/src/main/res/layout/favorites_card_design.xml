@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardBackgroundColor="@color/color_4"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="@dimen/radius15"
         app:cardElevation="@dimen/card_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,11 +22,11 @@
                 android:id="@+id/textViewFavoritesFoodName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/layout_margin8"
                 android:fontFamily="@font/poppins_medium"
                 android:text="TextView"
                 android:textColor="@color/secondary_color"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size20"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageViewFavoritesFood" />
@@ -35,11 +35,11 @@
                 android:id="@+id/textViewFavoritesFoodPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/layout_margin8"
                 android:fontFamily="@font/poppins_medium"
                 android:text="TextView"
                 android:textColor="@color/secondary_color"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size18"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewFavoritesFoodName" />
