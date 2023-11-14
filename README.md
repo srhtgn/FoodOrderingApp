@@ -20,3 +20,4 @@ This application is a simple food ordering app that retrieves data online and al
 - Navigation
 
 # Application Images
+![Screenshot_1699555074](https://github.com/srhtgn/FoodOrderingApp/assets/71978942/2064afea-bfdd-422f-8d18-170093283502)
